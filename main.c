@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: kyuki <kyuki@student.42tokyo.jp>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/30 13:19:27 by kyuki             #+#    #+#             */
-/*   Updated: 2021/05/30 13:19:28 by kyuki            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "libasm.h"
 #include <stdio.h>
 #include <unistd.h>
@@ -20,7 +8,7 @@
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
 #define GREEN   "\033[32m"
-#define BUFFER_SIZE 1000
+#define BUFFER_SIZE 100000
 
 #define OPEN_FILE "kyuki"
 
@@ -63,11 +51,9 @@ void test_ft_strcpy(char *s)
 	char tmp1[BUFFER_SIZE];
 	char tmp2[BUFFER_SIZE];
 	char tmp3[BUFFER_SIZE];
-	char *a;
-	char *b;
-	a=ft_strcpy(tmp1 ,s);
-	b=strcpy(tmp2 ,s);
-	if (!strcmp(tmp1, tmp2))
+	ft_strcpy(tmp1 ,s);
+	strcpy(tmp2 ,s);
+	if ((!strcmp(tmp1, tmp2)))
 		printf("%s[OK]%s ", GREEN, RESET);
 	else
 		printf("%s[KO]%s ", RED, RESET);
@@ -115,9 +101,8 @@ void test_ft_read(char *path, int size)
 	int err;
 	int fd;
 
-	res_lib = malloc(sizeof(char) * 1000 + 1);
-	res_myf = malloc(sizeof(char) * 1000 + 1);
-
+	res_lib = calloc(1, sizeof(char) * BUFFER_SIZE + 1);
+	res_myf = calloc(1, sizeof(char) * BUFFER_SIZE + 1);
 	errno = 0;
 	if (size == 42)
 		fd = 42;
@@ -190,6 +175,8 @@ int main()
 	test_ft_strcmp("", "");
 	test_ft_strcmp("the\0hidden", "the\0hidden");
 	test_ft_strcmp("\xff", "\xff\xff");
+	test_ft_strcmp("\xff", "\xff\xfe");
+	test_ft_strcmp("\x02", "\x02\x01");
 	puts("\n");
 	printf("================================\n");
 	printf("========== FT_STRDUP ===========\n");
@@ -207,6 +194,7 @@ int main()
 	test_ft_read(NULL, 5);
 	test_ft_read("./test.txt", 100);
 	test_ft_read("./test.txt", 42);
+	test_ft_read("./main.c", 100000);
 	puts("\n");
 	return 0;
 }

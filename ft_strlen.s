@@ -1,22 +1,18 @@
-; ************************************************************************** */
-;                                                                            */
-;                                                        :::      ::::::::   */
-;   ft_strlen.s                                        :+:      :+:    :+:   */
-;                                                    +:+ +:+         +:+     */
-;   By: kyuki <kyuki@student.42tokyo.jp>           +#+  +:+       +#+        */
-;                                                +#+#+#+#+#+   +#+           */
-;   Created: 2021/05/30 13:19:27 by kyuki             #+#    #+#             */
-;   Updated: 2021/05/30 13:19:28 by kyuki            ###   ########.fr       */
-;                                                                            */
-; ************************************************************************** */
-global _ft_strlen
+%ifdef __LINUX__
+    %define M_FT_STRLEN ft_strlen
+%else
+    %define M_FT_STRLEN _ft_strlen
+%endif
+
+global M_FT_STRLEN
 section .text
-_ft_strlen:
-		xor rax, rax			;rax = 0;
+M_FT_STRLEN:
+	xor	rcx, rcx ;rax = 0;
 loop:
-		cmp byte[rdi + rax], 0	;str[top of addr src  + rax] == \0
-		je exit_loop			;if a == b
-		inc rax					;rax++
-		jmp loop				;jump exit_loop
+	cmp	byte[rdi + rcx], 0 ;if(str[top of addr src  + rax] == \0)
+	je	exit_loop ;if(a == b)
+	inc	rcx ;rax++
+	jmp	loop ;jump to exit_loop
 exit_loop:
-		ret
+	mov	rax, rcx
+	ret

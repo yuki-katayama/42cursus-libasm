@@ -1,20 +1,8 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: kyuki <kyuki@student.42tokyo.jp>           +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/05/30 13:19:49 by kyuki             #+#    #+#              #
-#    Updated: 2021/05/30 13:21:15 by kyuki            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME	=	libasm.a
 
 CC		=	gcc
 
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-g -Wall -Wextra -Werror
 
 RM		= rm -rf
 
@@ -31,7 +19,11 @@ AR		=	ar rcs
 
 NASM	=	nasm
 
-NASMFLAGS	=	-f macho64
+ifeq ($(shell uname),Linux)
+	NASMFLAGS = -Fdwarf -felf64 -D __LINUX__=1
+else
+	NASMFLAGS = -Fdwarf -fmacho64
+endif
 
 %.o	: %.s
 	$(NASM) $(NASMFLAGS) $< -o $@
